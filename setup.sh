@@ -23,43 +23,57 @@ if ! command -v claude &> /dev/null; then
     exit 1
 fi
 
-# Create directories
+# Create base directories (only for non-symlinked dirs)
 echo -e "${YELLOW}Creating directories...${NC}"
-mkdir -p "$CLAUDE_DIR"/{agents,commands,skills/prd,skills/ralph,rules/delegator,mcp-servers}
+mkdir -p "$CLAUDE_DIR"/{skills,mcp-servers}
 
-# Copy CLAUDE.md (global instructions)
-echo -e "${YELLOW}Copying CLAUDE.md...${NC}"
-if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
-    echo -e "${YELLOW}  Backing up existing CLAUDE.md...${NC}"
-    cp "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md.backup"
-fi
-cp "$SCRIPT_DIR/CLAUDE.md" "$CLAUDE_DIR/"
+# Helper function to create symlink (backs up existing if not a symlink)
+create_symlink() {
+    local source="$1"
+    local target="$2"
 
-# Copy agents
-echo -e "${YELLOW}Copying custom agents...${NC}"
-cp "$SCRIPT_DIR/agents/"*.md "$CLAUDE_DIR/agents/"
+    if [ -L "$target" ]; then
+        # Already a symlink, remove it
+        rm "$target"
+    elif [ -e "$target" ]; then
+        # Exists but not a symlink, backup
+        echo -e "${YELLOW}  Backing up existing $(basename "$target")...${NC}"
+        mv "$target" "${target}.backup"
+    fi
 
-# Copy commands
-echo -e "${YELLOW}Copying custom commands...${NC}"
-cp "$SCRIPT_DIR/commands/"*.md "$CLAUDE_DIR/commands/"
+    ln -s "$source" "$target"
+    echo -e "${GREEN}  Linked: $(basename "$target")${NC}"
+}
 
-# Copy skills
-echo -e "${YELLOW}Copying skills...${NC}"
-cp "$SCRIPT_DIR/skills/prd/SKILL.md" "$CLAUDE_DIR/skills/prd/"
-cp "$SCRIPT_DIR/skills/ralph/SKILL.md" "$CLAUDE_DIR/skills/ralph/"
-# Copy other skills if they exist
+echo -e "${YELLOW}Creating symlinks (changes will auto-sync to git)...${NC}"
+echo ""
+
+# Symlink CLAUDE.md
+create_symlink "$SCRIPT_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
+
+# Symlink entire directories
+create_symlink "$SCRIPT_DIR/agents" "$CLAUDE_DIR/agents"
+create_symlink "$SCRIPT_DIR/commands" "$CLAUDE_DIR/commands"
+create_symlink "$SCRIPT_DIR/rules" "$CLAUDE_DIR/rules"
+
+# Symlink skill subdirectories (not the whole skills dir - it has built-in skills)
+create_symlink "$SCRIPT_DIR/skills/prd" "$CLAUDE_DIR/skills/prd"
+create_symlink "$SCRIPT_DIR/skills/ralph" "$CLAUDE_DIR/skills/ralph"
+# Symlink individual skill files at root level
 for f in "$SCRIPT_DIR/skills/"*.md; do
-    [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/skills/"
+    if [ -f "$f" ]; then
+        fname=$(basename "$f")
+        create_symlink "$f" "$CLAUDE_DIR/skills/$fname"
+    fi
 done
-
-# Copy rules
-echo -e "${YELLOW}Copying rules...${NC}"
-cp "$SCRIPT_DIR/rules/delegator/"*.md "$CLAUDE_DIR/rules/delegator/"
 
 echo ""
 echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}   Files copied successfully!${NC}"
+echo -e "${GREEN}   Symlinks created successfully!${NC}"
 echo -e "${GREEN}========================================${NC}"
+echo -e "${BLUE}Changes to ~/.claude config files now go to:${NC}"
+echo -e "${BLUE}  $SCRIPT_DIR${NC}"
+echo -e "${BLUE}Just 'git add/commit/push' from there!${NC}"
 echo ""
 
 # Plugin installation
