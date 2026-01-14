@@ -1,0 +1,23 @@
+# Secrets - never commit these
+*.env
+.env.*
+secrets.json
+credentials.json
+
+# Backup files
+*.backup
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Node modules (if any local MCP server dev)
+node_modules/

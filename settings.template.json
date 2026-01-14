@@ -1,0 +1,48 @@
+{
+  "extraKnownMarketplaces": {
+    "jarrodwatts-claude-delegator": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-delegator"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "figma@claude-plugins-official": true,
+    "canvas@claude-canvas": true,
+    "claude-delegator@jarrodwatts-claude-delegator": true
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay -v 3.0 /System/Library/Sounds/Blow.aiff",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay -v 3.0 /System/Library/Sounds/Blow.aiff",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "mcpServers": {
+    "codex": {
+      "type": "stdio",
+      "command": "codex",
+      "args": ["-m", "gpt-5.2-codex", "mcp-server"]
+    }
+  }
+}

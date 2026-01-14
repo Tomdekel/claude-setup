@@ -1,0 +1,69 @@
+{
+  "_comment": "MCP server configurations - add these via 'claude mcp add' or merge into ~/.claude.json",
+
+  "global": {
+    "_description": "Add to ~/.claude.json under 'mcpServers'",
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com/mcp"
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp"
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "env": {}
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {}
+    }
+  },
+
+  "project": {
+    "_description": "Add per-project or to home directory config",
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "env": {}
+    },
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp"
+    },
+    "postgres-mcp": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--python", "3.12", "postgres-mcp", "--access-mode=unrestricted"],
+      "env": {
+        "DATABASE_URI": "YOUR_DATABASE_URI_HERE"
+      }
+    },
+    "gcloud": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@google-cloud/gcloud-mcp"],
+      "env": {}
+    },
+    "v0-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["$HOME/.claude/mcp-servers/v0-mcp/dist/main.js"],
+      "env": {
+        "V0_API_KEY": "YOUR_V0_API_KEY_HERE"
+      }
+    }
+  }
+}
