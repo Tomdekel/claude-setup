@@ -84,13 +84,17 @@ echo ""
 echo -e "${BLUE}Adding plugin marketplaces...${NC}"
 claude plugins marketplace add dvdsgl/claude-canvas 2>/dev/null || echo "  (claude-canvas marketplace may already exist)"
 claude plugins marketplace add jarrodwatts/claude-delegator 2>/dev/null || echo "  (claude-delegator marketplace may already exist)"
+claude plugins marketplace add jarrodwatts/claude-hud 2>/dev/null || echo "  (claude-hud marketplace may already exist)"
 claude plugins marketplace add thedotmack/claude-mem 2>/dev/null || echo "  (claude-mem marketplace may already exist)"
+claude plugins marketplace add kingbootoshi/cartographer 2>/dev/null || echo "  (cartographer marketplace may already exist)"
 
 # Install plugins
 echo -e "${BLUE}Installing plugins...${NC}"
 claude plugins install canvas@claude-canvas 2>/dev/null || echo "  (canvas may already be installed)"
 claude plugins install claude-delegator@jarrodwatts-claude-delegator 2>/dev/null || echo "  (claude-delegator may already be installed)"
+claude plugins install claude-hud@jarrodwatts-claude-hud 2>/dev/null || echo "  (claude-hud may already be installed)"
 claude plugins install claude-mem@thedotmack-claude-mem 2>/dev/null || echo "  (claude-mem may already be installed)"
+claude plugins install cartographer@kingbootoshi-cartographer 2>/dev/null || echo "  (cartographer may already be installed)"
 
 echo ""
 echo -e "${GREEN}Plugins installed!${NC}"
@@ -154,7 +158,10 @@ echo "   Ensure ~/.claude/settings.json has:"
 echo '   "enabledPlugins": {'
 echo '     "figma@claude-plugins-official": true,'
 echo '     "canvas@claude-canvas": true,'
-echo '     "claude-delegator@jarrodwatts-claude-delegator": true'
+echo '     "claude-delegator@jarrodwatts-claude-delegator": true,'
+echo '     "claude-hud@jarrodwatts-claude-hud": true,'
+echo '     "claude-mem@thedotmack-claude-mem": true,'
+echo '     "cartographer@kingbootoshi-cartographer": true'
 echo '   }'
 echo ""
 echo -e "${GREEN}========================================${NC}"
